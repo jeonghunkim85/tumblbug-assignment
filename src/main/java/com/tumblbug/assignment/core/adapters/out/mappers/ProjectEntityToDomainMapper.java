@@ -1,7 +1,6 @@
 package com.tumblbug.assignment.core.adapters.out.mappers;
 
 import com.tumblbug.assignment.commons.utils.BaseMapper;
-import com.tumblbug.assignment.commons.utils.Converters;
 import com.tumblbug.assignment.core.domains.Creator;
 import com.tumblbug.assignment.core.domains.Project;
 import com.tumblbug.assignment.core.infrastructures.entities.ProjectEntity;
