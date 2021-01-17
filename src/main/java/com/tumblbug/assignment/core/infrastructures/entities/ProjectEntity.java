@@ -28,6 +28,7 @@ public class ProjectEntity {
 
     String description;
 
+    @Builder.Default
     boolean published = true;
 
     String status;

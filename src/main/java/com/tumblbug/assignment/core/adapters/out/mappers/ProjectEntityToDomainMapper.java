@@ -1,6 +1,7 @@
 package com.tumblbug.assignment.core.adapters.out.mappers;
 
 import com.tumblbug.assignment.commons.utils.BaseMapper;
+import com.tumblbug.assignment.commons.utils.Converters;
 import com.tumblbug.assignment.core.domains.Creator;
 import com.tumblbug.assignment.core.domains.Project;
 import com.tumblbug.assignment.core.infrastructures.entities.ProjectEntity;
@@ -27,7 +28,6 @@ public class ProjectEntityToDomainMapper extends BaseMapper<ProjectEntity, Proje
             mapping
                 .using(ctx -> projectToCreateorMapper.map((ProjectEntity) ctx.getSource()))
                 .map(s -> s, Project::setCreator);
-
         });
     }
 
@@ -37,6 +37,11 @@ public class ProjectEntityToDomainMapper extends BaseMapper<ProjectEntity, Proje
             mapping.map(s -> s.getCreator().getName(), ProjectEntity::setCreatorName);
             mapping.map(s -> s.getCreator().getEmail(), ProjectEntity::setCreatorEmail);
             mapping.map(s -> s.getCreator().getPhone(), ProjectEntity::setCreatorPhone);
+
+            mapping.using(Converters.TO_STRING_MAPPER)
+                    .map(Project::getStatus, ProjectEntity::setStatus);
+
+            mapping.skip(ProjectEntity::setId);
         });
     }
 }

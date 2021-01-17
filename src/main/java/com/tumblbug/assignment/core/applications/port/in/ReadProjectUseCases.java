@@ -13,7 +13,7 @@ public interface ReadProjectUseCases {
     Page<Project> getProjectList(ReadProjectPort.ProjectQueryParams projectQueryParams);
 
     // 단건 조회
-    Optional<Project> getProject(UUID id);
+    Project getProject(UUID id);
 
 
 }

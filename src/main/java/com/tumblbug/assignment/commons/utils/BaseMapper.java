@@ -43,4 +43,14 @@ public abstract class BaseMapper<S, D> {
         return mapper.map(destination, sourceTypeClass);
     }
 
+    public D set(S source, D destination) {
+        mapper.map(source, destination);
+        return destination;
+    }
+
+    public S setReverse(D destination, S source) {
+        mapper.map(destination, source);
+        return source;
+    }
+
 }

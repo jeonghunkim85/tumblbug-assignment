@@ -13,8 +13,11 @@ import java.util.function.BiFunction;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Project {
+
+    public static final Long MAX_AMOUNT = 100000000L;
 
     @Getter
     @AllArgsConstructor
@@ -31,11 +34,10 @@ public class Project {
         private static final String EXCEPTION_MESSAGE = "cannot determine the status of project.";
 
         public static Status determineStatus(LocalDateTime now, Project project) {
-
             return Arrays.stream(values())
                     .filter(s -> s.fitToThis.apply(now, project))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException(EXCEPTION_MESSAGE));
+                    .orElseThrow(() -> new IllegalStateException(EXCEPTION_MESSAGE));
         }
     }
 
@@ -52,8 +54,11 @@ public class Project {
 
     Long targetAmount;
 
-    Integer sponsoredCount; // 후원수
-    Long sponsoredAmount; // 후원액
+    @Builder.Default
+    Integer sponsoredCount = 0; // 후원수
+
+    @Builder.Default
+    Long sponsoredAmount = 0L; // 후원액
 
     Creator creator;
 
@@ -82,6 +87,9 @@ public class Project {
 
     public void support(long amount) {
         this.sponsoredAmount += amount;
+        if(this.sponsoredAmount > MAX_AMOUNT) {
+            throw new IllegalStateException("sponsoredAmount can't over " + MAX_AMOUNT);
+        }
         this.sponsoredCount += 1;
     }
 }

@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface SupportUseCases {
 
-    void support(Support support);
+    void doSupport(Support support);
 
 }

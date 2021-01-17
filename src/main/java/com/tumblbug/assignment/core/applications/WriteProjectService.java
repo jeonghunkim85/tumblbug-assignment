@@ -6,6 +6,9 @@ import com.tumblbug.assignment.core.applications.port.out.WriteProjectPort;
 import com.tumblbug.assignment.core.domains.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -15,20 +18,20 @@ public class WriteProjectService implements WriteProjectUseCases {
     final WriteProjectPort writeProjectPort;
 
     @Override
+    @Transactional
     public Project registerProject(Project project) {
-        // todo. implement
-
-        return null;
+        return this.writeProjectPort.registerProject(project);
     }
 
     @Override
+    @Transactional
     public Project updateProject(Project project) {
-        // todo. implement
-        return null;
+        return this.writeProjectPort.updateProject(project);
     }
 
     @Override
-    public void deleteProject(Project project) {
-        // todo. implement
+    @Transactional
+    public void deleteProject(UUID id) {
+        this.writeProjectPort.deleteProject(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.tumblbug.assignment.core.adapters.in;
 
+import com.tumblbug.assignment.core.adapters.in.models.request.ProjectRequestModel;
+import com.tumblbug.assignment.core.adapters.in.models.request.mappers.ProjectRequestModelMapper;
 import com.tumblbug.assignment.core.adapters.in.models.response.ProjectListResponseModel;
 import com.tumblbug.assignment.core.adapters.in.models.response.ProjectResponseModel;
 import com.tumblbug.assignment.core.adapters.in.models.response.mappers.ProjectListResponseModelMapper;
@@ -7,16 +9,15 @@ import com.tumblbug.assignment.core.adapters.in.models.response.mappers.ProjectR
 import com.tumblbug.assignment.core.applications.port.in.ReadProjectUseCases;
 import com.tumblbug.assignment.core.applications.port.in.WriteProjectUseCases;
 import com.tumblbug.assignment.core.applications.port.out.ReadProjectPort;
+import com.tumblbug.assignment.core.domains.Project;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.xml.ws.http.HTTPException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -32,19 +33,16 @@ public class ProjectController {
     private final ProjectResponseModelMapper projectResponseModelMapper;
     private final ProjectListResponseModelMapper projectListResponseModelMapper;
 
-    @GetMapping("test")
-    public String test() {
-        return "it works!";
-    }
+    private final ProjectRequestModelMapper projectRequestModelMapper;
 
     @Data
-    public static class GetProjectListCommand implements ReadProjectPort.ProjectQueryParams {
+    public class GetProjectListCommand implements ReadProjectPort.ProjectQueryParams {
         int pageNumber = 0;
         int pageSize = 10;
     }
 
     @GetMapping("projects")
-    public Page<ProjectListResponseModel> getProjectList(@RequestParam GetProjectListCommand command) {
+    public Page<ProjectListResponseModel> getProjectList(GetProjectListCommand command) {
         log.debug("#getProjectList({})", command);
         return this.readProjectUseCases
                 .getProjectList(command)
@@ -54,14 +52,40 @@ public class ProjectController {
     @GetMapping("projects/{id}")
     public ProjectResponseModel getProject(@PathVariable String id) {
         log.debug("#getProject({})", id);
-        if(id == null) {
+        UUID uuid = UUID.fromString(id);
+        try{
+            Project project = this.readProjectUseCases.getProject(uuid);
+            return this.projectResponseModelMapper.map(project);
+        }catch (NoSuchElementException nse) {
             throw new HTTPException(HttpStatus.NOT_FOUND.value());
         }
-        UUID uuid = UUID.fromString(id);
-        return this.readProjectUseCases.getProject(uuid)
-                .map(projectResponseModelMapper::map)
-                .orElseThrow(() -> new HTTPException(HttpStatus.NOT_FOUND.value()));
+    }
 
+    @PostMapping("projects")
+    public String insertProject(@RequestBody @Valid ProjectRequestModel projectRequestModel){
+        log.debug("#insertProject({})", projectRequestModel);
+        Project project = this.projectRequestModelMapper.map(projectRequestModel);
+        project = this.writeProjectUseCases.registerProject(project);
+        log.debug("inserted: {}", project);
+        return project.getId().toString();
+    }
+
+    @PatchMapping("projects/{id}")
+    public ProjectResponseModel updateProject(@PathVariable String id, @RequestBody @Valid ProjectRequestModel projectRequestModel) {
+        log.debug("#updateProject({}, {})", id, projectRequestModel);
+        UUID uuid = UUID.fromString(id);
+        Project project = this.projectRequestModelMapper.map(projectRequestModel);
+        project.setId(uuid);
+        project = this.writeProjectUseCases.updateProject(project);
+        log.debug("#updatedProject: {}", project);
+        return this.projectResponseModelMapper.map(project);
+    }
+
+    @DeleteMapping("projects/{id}")
+    public void deleteProject(@PathVariable String id) {
+        log.debug("#deleteProject({})", id);
+        UUID uuid = UUID.fromString(id);
+        this.writeProjectUseCases.deleteProject(uuid);
     }
 
 }

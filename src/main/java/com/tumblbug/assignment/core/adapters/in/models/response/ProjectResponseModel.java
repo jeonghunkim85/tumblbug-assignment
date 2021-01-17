@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class ProjectResponseModel {
 
-    String id;
-
     String title;
 
     String description;
