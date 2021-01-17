@@ -21,7 +21,7 @@ public class ProjectResponseModelMapper extends BaseMapper<Project, ProjectRespo
             mapping.map(s -> s.getCreator().getPhone(), ProjectResponseModel::setCreatorPhone);
             mapping.map(s -> s.getCreator().getEmail(), ProjectResponseModel::setCreatorEmail);
 
-            mapping.using(Converters.TO_STRING_CONVERTER)
+            mapping.using(ctx -> ((Project.Status)ctx.getSource()).getDescription())
                     .map(Project::getStatus, ProjectResponseModel::setStatus);
         });
 

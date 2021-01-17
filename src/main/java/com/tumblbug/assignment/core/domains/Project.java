@@ -19,7 +19,7 @@ public class Project {
     @Getter
     @AllArgsConstructor
     public enum Status {
-        PREPAIRING("준비중", (now, project) -> project.hasProjectBegun(now)),
+        PREPAIRING("준비중", (now, project) -> !project.hasProjectBegun(now)),
         IN_PROGRESS("진행중", (now, project) -> project.hasProjectBegun(now) && !project.hasProjectClosed(now)),
         SUCCEED("성공", (now, project) -> project.hasProjectClosed(now) && project.hasAchieveSponsorship()),
         FAILED("실패", (now, project) -> project.hasProjectClosed(now) && !project.hasAchieveSponsorship());

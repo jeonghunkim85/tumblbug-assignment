@@ -15,7 +15,7 @@ public class ProjectEntityToDomainMapper extends BaseMapper<ProjectEntity, Proje
         protected void configMap(TypeMap<ProjectEntity, Creator> typeMap) {
             typeMap.addMappings(mapping -> {
                 mapping.map(ProjectEntity::getCreatorPhone, Creator::setPhone);
-                mapping.map(ProjectEntity::getCreaterEmail, Creator::setEmail);
+                mapping.map(ProjectEntity::getCreatorEmail, Creator::setEmail);
                 mapping.map(ProjectEntity::getCreatorName, Creator::setName);
             });
         }
@@ -35,7 +35,7 @@ public class ProjectEntityToDomainMapper extends BaseMapper<ProjectEntity, Proje
     protected void configMapReverse(TypeMap<Project, ProjectEntity> typeMap) {
         typeMap.addMappings(mapping -> {
             mapping.map(s -> s.getCreator().getName(), ProjectEntity::setCreatorName);
-            mapping.map(s -> s.getCreator().getEmail(), ProjectEntity::setCreaterEmail);
+            mapping.map(s -> s.getCreator().getEmail(), ProjectEntity::setCreatorEmail);
             mapping.map(s -> s.getCreator().getPhone(), ProjectEntity::setCreatorPhone);
         });
     }
