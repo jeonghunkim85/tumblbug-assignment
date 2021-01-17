@@ -4,7 +4,6 @@ import com.tumblbug.assignment.core.applications.port.out.ReadProjectPort;
 import com.tumblbug.assignment.core.domains.Project;
 import org.springframework.data.domain.Page;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface ReadProjectUseCases {

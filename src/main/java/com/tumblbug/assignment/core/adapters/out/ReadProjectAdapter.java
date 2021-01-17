@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -28,7 +29,12 @@ public class ReadProjectAdapter implements ReadProjectPort {
 
     @Override
     public Page<Project> findAll(ProjectQueryParams projectQueryParams) {
-        Pageable pageable = PageRequest.of(projectQueryParams.getPageNumber(), projectQueryParams.getPageSize());
+
+        Sort sort = Sort.by(projectQueryParams.getSortBy().getValue());
+        projectQueryParams.getSortDirection().sort(sort);
+
+        Pageable pageable = PageRequest.of(projectQueryParams.getPageNumber(), projectQueryParams.getPageSize(), sort);
+
         return this.projectRepository.findAll(pageable)
                 .map(projectEntityToDomainMapper::map);
     }

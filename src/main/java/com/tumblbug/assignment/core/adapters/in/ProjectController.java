@@ -16,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.xml.ws.http.HTTPException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -37,6 +37,8 @@ public class ProjectController {
 
     @Data
     public class GetProjectListCommand implements ReadProjectPort.ProjectQueryParams {
+        SortBy sortBy = SortBy.BEGIN_DATE;
+        SortDirection sortDirection = SortDirection.ASC;
         int pageNumber = 0;
         int pageSize = 10;
     }
@@ -57,7 +59,7 @@ public class ProjectController {
             Project project = this.readProjectUseCases.getProject(uuid);
             return this.projectResponseModelMapper.map(project);
         }catch (NoSuchElementException nse) {
-            throw new HTTPException(HttpStatus.NOT_FOUND.value());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -85,7 +87,11 @@ public class ProjectController {
     public void deleteProject(@PathVariable String id) {
         log.debug("#deleteProject({})", id);
         UUID uuid = UUID.fromString(id);
-        this.writeProjectUseCases.deleteProject(uuid);
+        try {
+            this.writeProjectUseCases.deleteProject(uuid);
+        }catch (NoSuchElementException nse) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

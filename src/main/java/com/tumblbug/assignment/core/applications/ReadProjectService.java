@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,8 +24,7 @@ public class ReadProjectService implements ReadProjectUseCases {
     public Page<Project> getProjectList(ReadProjectPort.ProjectQueryParams projectQueryParams) {
         Page<Project> projects = this.readProjectPort.findAll(projectQueryParams);
         // project 상태 업데이트
-        projects.stream()
-                .forEach(this.writeProjectPort::updateProject);
+        projects.stream().forEach(this.writeProjectPort::updateProject);
         return projects;
     }
 

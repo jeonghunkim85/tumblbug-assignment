@@ -1,4 +1,4 @@
-package com.tumblbug.assignment.configurations;
+package com.tumblbug.assignment.commons.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
