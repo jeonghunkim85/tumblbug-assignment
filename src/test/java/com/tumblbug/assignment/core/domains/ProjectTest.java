@@ -1,8 +1,11 @@
 package com.tumblbug.assignment.core.domains;
 
+import com.tumblbug.assignment.core.domains.exceptions.MaxAmountOverException;
+import com.tumblbug.assignment.core.domains.exceptions.MaxSupportCountOverException;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -39,6 +42,43 @@ public class ProjectTest {
 
         Project case3 = Project.builder().sponsoredAmount(10000L).targetAmount(10000L).build();
         assertTrue(case3.hasAchieveSponsorship());
+    }
+
+    @Test
+    public void supportHappycaseTest() {
+
+        Project project = Project.builder()
+                .sponsoredAmount(1000L)
+                .sponsoredCount(10)
+                .targetAmount(10000L)
+                .build();
+
+        project.support(100L);
+        assertTrue(project.getSponsoredAmount() == 1100L);
+        assertTrue(project.getSponsoredCount() == 11);
+    }
+
+    @Test(expected = MaxAmountOverException.class)
+    public void support_over_max_amount_test() {
+
+        Project project = Project.builder()
+                .sponsoredAmount(99999999L)
+                .sponsoredCount(10)
+                .build();
+
+        project.support(2L);
+    }
+
+    @Test(expected = MaxSupportCountOverException.class)
+    public void support_over_max_count_test() {
+
+        Project project = Project.builder()
+                .sponsoredAmount(0L)
+                .sponsoredCount(100000)
+                .build();
+
+        project.support(100L);
+
     }
 
 }

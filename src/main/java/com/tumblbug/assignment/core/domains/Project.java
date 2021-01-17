@@ -1,7 +1,7 @@
 package com.tumblbug.assignment.core.domains;
 
-import com.tumblbug.assignment.core.domains.exceptions.MaxAmountOverExceptionProject;
-import com.tumblbug.assignment.core.domains.exceptions.MaxSupportCountOverExceptionProject;
+import com.tumblbug.assignment.core.domains.exceptions.MaxAmountOverException;
+import com.tumblbug.assignment.core.domains.exceptions.MaxSupportCountOverException;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -90,11 +90,11 @@ public class Project {
     public void support(long amount) {
         this.sponsoredAmount += amount;
         if(this.sponsoredAmount > MAX_AMOUNT) {
-            throw new MaxAmountOverExceptionProject("sponsoredAmount");
+            throw new MaxAmountOverException("sponsoredAmount");
         }
         this.sponsoredCount += 1;
         if(this.sponsoredCount > MAX_SUPPORT_COUNT) {
-            throw new MaxSupportCountOverExceptionProject();
+            throw new MaxSupportCountOverException();
         }
     }
 }
