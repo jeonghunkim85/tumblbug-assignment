@@ -29,4 +29,16 @@ public class ProjectTest {
         assertFalse(project.hasProjectBegun(LocalDateTime.of(2020, 12, 31, 23, 59, 59)));
     }
 
+    @Test
+    public void hasAchieveSponsorshipTest() {
+        Project case1 = Project.builder().sponsoredAmount(1000L).targetAmount(10000L).build();
+        assertFalse(case1.hasAchieveSponsorship());
+
+        Project case2 = Project.builder().sponsoredAmount(10000L).targetAmount(1000L).build();
+        assertTrue(case2.hasAchieveSponsorship());
+
+        Project case3 = Project.builder().sponsoredAmount(10000L).targetAmount(10000L).build();
+        assertTrue(case3.hasAchieveSponsorship());
+    }
+
 }

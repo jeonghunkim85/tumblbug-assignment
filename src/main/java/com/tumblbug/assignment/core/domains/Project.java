@@ -22,7 +22,6 @@ public class Project {
     public static final Long MAX_AMOUNT = 100000000L;
     public static final int MAX_SUPPORT_COUNT = 100000;
 
-    @Getter
     @AllArgsConstructor
     public enum Status {
         PREPAIRING("준비중", (now, project) -> !project.hasProjectBegun(now)),
@@ -30,15 +29,15 @@ public class Project {
         SUCCEED("성공", (now, project) -> project.hasProjectClosed(now) && project.hasAchieveSponsorship()),
         FAILED("실패", (now, project) -> project.hasProjectClosed(now) && !project.hasAchieveSponsorship());
 
-        public final String description;
-
-        public final BiFunction<LocalDateTime, Project, Boolean> fitToThis;
+        @Getter
+        private final String description;
+        private final BiFunction<LocalDateTime, Project, Boolean> matcher;
 
         private static final String EXCEPTION_MESSAGE = "cannot determine the status of project.";
 
         public static Status determineStatus(LocalDateTime now, Project project) {
             return Arrays.stream(values())
-                    .filter(s -> s.fitToThis.apply(now, project))
+                    .filter(s -> s.matcher.apply(now, project))
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException(EXCEPTION_MESSAGE));
         }
