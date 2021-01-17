@@ -23,15 +23,15 @@ public class ProjectRequestModel {
 
     boolean published = true;
 
-    @NotEmpty
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT, timezone = Constants.TIMEZONE)
     LocalDateTime beginDate;
 
-    @NotEmpty
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_FORMAT, timezone = Constants.TIMEZONE)
     LocalDateTime dueDate;
 
-    @NotEmpty
+    @NotNull
     @Max(value = 100000000L)
     Long targetAmount;
 

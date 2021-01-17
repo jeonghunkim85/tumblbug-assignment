@@ -38,9 +38,6 @@ public class ProjectEntityToDomainMapper extends BaseMapper<ProjectEntity, Proje
             mapping.map(s -> s.getCreator().getEmail(), ProjectEntity::setCreatorEmail);
             mapping.map(s -> s.getCreator().getPhone(), ProjectEntity::setCreatorPhone);
 
-            mapping.using(Converters.TO_STRING_MAPPER)
-                    .map(Project::getStatus, ProjectEntity::setStatus);
-
             mapping.skip(ProjectEntity::setId);
         });
     }

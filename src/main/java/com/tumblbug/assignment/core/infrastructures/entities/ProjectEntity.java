@@ -1,5 +1,6 @@
 package com.tumblbug.assignment.core.infrastructures.entities;
 
+import com.tumblbug.assignment.core.domains.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Project")
+@Table(indexes = {
+        @Index(columnList = "beginDate"),
+        @Index(columnList = "dueDate"),
+        @Index(columnList = "targetAmount"),
+        @Index(columnList = "sponsoredAmount")
+})
 public class ProjectEntity {
 
     @Id
@@ -26,12 +33,15 @@ public class ProjectEntity {
     @Column(length = 50)
     String title;
 
+    // 255 is default
+//    @Column(length = 255)
     String description;
 
     @Builder.Default
     boolean published = true;
 
-    String status;
+    @Enumerated(EnumType.STRING)
+    Project.Status status;
 
     LocalDateTime beginDate;
     LocalDateTime dueDate;
@@ -53,12 +63,12 @@ public class ProjectEntity {
     LocalDateTime updatedAt;
 
 
-    @PostPersist
+    @PrePersist
     void postPersist() {
         this.createdAt = this.updatedAt = LocalDateTime.now();
     }
 
-    @PostUpdate
+    @PreUpdate
     void postUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

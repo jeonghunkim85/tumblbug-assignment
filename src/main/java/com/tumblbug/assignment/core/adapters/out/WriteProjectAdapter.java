@@ -6,11 +6,13 @@ import com.tumblbug.assignment.core.domains.Project;
 import com.tumblbug.assignment.core.infrastructures.entities.ProjectEntity;
 import com.tumblbug.assignment.core.infrastructures.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WriteProjectAdapter implements WriteProjectPort {
@@ -20,6 +22,7 @@ public class WriteProjectAdapter implements WriteProjectPort {
 
     @Override
     public Project registerProject(Project project) {
+        log.debug("project: {}", project);
         ProjectEntity projectEntity = this.projectEntityToDomainMapper.mapReverse(project);
         this.projectRepository.save(projectEntity);
         return this.projectEntityToDomainMapper.map(projectEntity);
