@@ -1,6 +1,5 @@
 package com.tumblbug.assignment.core.adapters.in.models.request;
 
-import com.tumblbug.assignment.core.domains.Project;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

@@ -1,5 +1,7 @@
 package com.tumblbug.assignment.core.domains;
 
+import com.tumblbug.assignment.core.domains.exceptions.MaxAmountOverExceptionProject;
+import com.tumblbug.assignment.core.domains.exceptions.MaxSupportCountOverExceptionProject;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +20,7 @@ import java.util.function.BiFunction;
 public class Project {
 
     public static final Long MAX_AMOUNT = 100000000L;
+    public static final int MAX_SUPPORT_COUNT = 100000;
 
     @Getter
     @AllArgsConstructor
@@ -88,9 +91,12 @@ public class Project {
     public void support(long amount) {
         this.sponsoredAmount += amount;
         if(this.sponsoredAmount > MAX_AMOUNT) {
-            throw new IllegalStateException("sponsoredAmount can't over " + MAX_AMOUNT);
+            throw new MaxAmountOverExceptionProject("sponsoredAmount");
         }
         this.sponsoredCount += 1;
+        if(this.sponsoredCount > MAX_SUPPORT_COUNT) {
+            throw new MaxSupportCountOverExceptionProject();
+        }
     }
 }
 
