@@ -1,7 +1,6 @@
 package com.tumblbug.assignment.core.adapters.in.models.response.mappers;
 
 import com.tumblbug.assignment.core.adapters.in.models.response.ProjectListResponseModel;
-import com.tumblbug.assignment.core.adapters.in.models.response.ProjectResponseModel;
 import com.tumblbug.assignment.core.domains.Creator;
 import com.tumblbug.assignment.core.domains.Project;
 import org.junit.Test;

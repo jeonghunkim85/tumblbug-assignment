@@ -5,7 +5,6 @@ import com.tumblbug.assignment.core.domains.exceptions.MaxSupportCountOverExcept
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 

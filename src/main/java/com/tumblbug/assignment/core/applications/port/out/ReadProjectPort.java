@@ -4,6 +4,8 @@ import com.tumblbug.assignment.core.domains.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
@@ -22,6 +24,12 @@ public interface ReadProjectPort {
 
         SortBy getSortBy();
         SortDirection getSortDirection();
+
+        default Pageable getPageable() {
+            Sort sort = Sort.by(this.getSortBy().getValue());
+            this.getSortDirection().sort(sort);
+            return PageRequest.of(this.getPageNumber(), this.getPageSize(), sort);
+        }
 
         @Getter
         @AllArgsConstructor

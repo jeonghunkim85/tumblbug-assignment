@@ -4,7 +4,6 @@ import com.tumblbug.assignment.core.applications.port.out.ReadProjectPort;
 import com.tumblbug.assignment.core.applications.port.out.WriteProjectPort;
 import com.tumblbug.assignment.core.domains.Creator;
 import com.tumblbug.assignment.core.domains.Project;
-import com.tumblbug.assignment.core.infrastructures.entities.ProjectEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

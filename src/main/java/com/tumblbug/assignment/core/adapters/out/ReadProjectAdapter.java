@@ -6,9 +6,7 @@ import com.tumblbug.assignment.core.domains.Project;
 import com.tumblbug.assignment.core.infrastructures.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -29,12 +27,7 @@ public class ReadProjectAdapter implements ReadProjectPort {
 
     @Override
     public Page<Project> findAll(ProjectQueryParams projectQueryParams) {
-
-        Sort sort = Sort.by(projectQueryParams.getSortBy().getValue());
-        projectQueryParams.getSortDirection().sort(sort);
-
-        Pageable pageable = PageRequest.of(projectQueryParams.getPageNumber(), projectQueryParams.getPageSize(), sort);
-
+        Pageable pageable = projectQueryParams.getPageable();
         return this.projectRepository.findAll(pageable)
                 .map(projectEntityToDomainMapper::map);
     }
